@@ -1,0 +1,25 @@
+version: '2'
+
+services:
+  nginx-php-fpm:
+    image: richarvey/nginx-php-fpm:latest
+    # restart: always
+    links:
+      - mariadb:mariadb
+      - memcached:memcached
+    volumes:
+      - ./docker-config/config.php:/var/www/html/config.php
+    environment:
+      # SSH_KEY: '<YOUR _KEY_HERE>'
+      GIT_REPO: 'https://github.com/cgonzalezg/facturascripts_2015.git'
+      # GIT_EMAIL: 'void@ngd.io'
+      # GIT_NAME: '<YOUR_NAME>'
+  memcached:
+    image: memcached
+  mariadb:
+    image: mariadb
+    environment:
+     - MYSQL_ROOT_PASSWORD=admin
+     - MYSQL_DATABASE=facturascripts
+    volumes:
+     - ./database:/var/lib/mysql
